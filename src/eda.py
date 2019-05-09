@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from os import listdir
 from os.path import isfile, join
+import matplotlib
+import matplotlib
 
 
 ########################################################################################################################
@@ -43,15 +45,16 @@ df_narrative = pd.read_pickle('data/df_narrative.pkl')
 # ----- Read in AviationData download ; delimiter == ' | ' ; drop last column which is all blank
 df_aviation = pd.read_csv('data/AviationData.txt', sep=" \| {0,1}", header=0).drop(['Unnamed: 31'], axis=1)
 df_aviation['Event Year Month'] = df_aviation['Event Date'].map(lambda x: x[6:10] + '-' + x[0:2])
-df_aviation['State'] = df_aviation['Location'].map(lambda x: str(x)[-2:])
+df_aviation['Event Year'] = df_aviation['Event Date'].map(lambda x: int(x[6:10]))
+df_aviation.loc[df_aviation['Country'] == 'United States', 'State'] = df_aviation['Location'].map(lambda x: str(x)[-2:])
 
 
 # ----- Get count of rows and columns
 print(df_narrative.shape)
-# 76133 examples ; 3 features
+# 76133 examples ; 3 original features
 
 print(df_aviation.shape)
-# 83,054 examples ; 31 original features ; 1 derived feature
+# 83,054 examples ; 31 original features ; 3 derived feature
 
 
 # ----- Get count of null or blank
@@ -66,10 +69,16 @@ for col in colnames_df_aviation:
 
 df_aviation['Event Id'].nunique()
 # 81,841 so there are duplicates
+
 df_aviation['Investigation Type'].value_counts()
 # Accident: 79,690; Incident: 3,361
+
 df_aviation['Accident Number'].nunique()
 # 83,054 so all unique
-event_year_month = df_aviation['Event Year Month'].value_counts().sort_index()
 
+event_year = df_aviation['Event Year'].value_counts().sort_index()
+event_year.plot(kind='bar')
+
+df_aviation['Country'].value_counts()
+# Accident: 79,690; Incident: 3,361
 
