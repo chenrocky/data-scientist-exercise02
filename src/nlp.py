@@ -220,7 +220,8 @@ print("\n\n".join(s for s in list_probable_cause if "The Safety Board's full rep
 list_pc_processed = preprocess(list_probable_cause)
 
 
-# ----- Load fastText vectors
+# ----- Download https://dl.fbaipublicfiles.com/fasttext/vectors-english/wiki-news-300d-1M.vec.zip to /data folder
+# ----- Load pre-trained fastText vectors
 start_time = time.time()
 word_vectors = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec')
 end_time = time.time()
