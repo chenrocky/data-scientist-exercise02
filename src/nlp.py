@@ -198,6 +198,7 @@ recent_years_pc = df_narrative_aviation_final.loc[df_narrative_aviation_final['E
         [2015, 2014, 2013, 2012, 2011])]
 list_probable_cause = list(recent_years_pc.probable_cause)
 list_event_dates = list(recent_years_pc['Event Date DT Format'])
+list_event_id = list(recent_years_pc['EventId'])
 
 
 # ----- Explore probable_cause strings that contain symbols to determine how to handle in preprocessing
@@ -276,14 +277,15 @@ dbscan_unique_elements, dbscan_counts_elements = np.unique(dbscan.labels_, retur
 dbscan_count_by_cluster = list(zip(dbscan_unique_elements,dbscan_counts_elements))
 
 # ----- Create DBSCAN results DataFrame
-dbscan_recent_years_pc = pd.DataFrame({'label': dbscan.labels_, 'pc': list_probable_cause, 'date': list_event_dates})
+dbscan_recent_years_pc = pd.DataFrame({'EventId': list_event_id, 'label': dbscan.labels_, 'pc': list_probable_cause,
+                                       'date': list_event_dates})
 # ----- Pickle results DataFrame
 dbscan_recent_years_pc.to_pickle('data/dbscan_recent_years_pc.pkl')
 
 # ----- Subset clusters, read probable_cause, and analyze commonalities
 dbscan_recent_years_pc_002 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 2]
-dbscan_recent_years_pc_005 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 5]
 dbscan_recent_years_pc_003 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 3]
+dbscan_recent_years_pc_005 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 5]
 dbscan_recent_years_pc_006 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 6]
 dbscan_recent_years_pc_007 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 7]
 dbscan_recent_years_pc_087 = dbscan_recent_years_pc.loc[dbscan_recent_years_pc['label'] == 86]
