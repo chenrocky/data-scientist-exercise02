@@ -1,5 +1,7 @@
 
 import json
+from os import listdir
+from os.path import isfile, join
 import pandas as pd
 import numpy as np
 import re
@@ -143,15 +145,15 @@ rep_mapping = {
 
 # ----- Read in narrative data pickle
 df_narrative = pd.read_pickle('data/df_narrative.pkl')
-# ----- Check for duplicates of EventId in narrative data ----- there are no duplicates
-df_narrative.shape[0] == df_narrative['EventId'].nunique()
+# ----- Check for duplicates of EventId in narrative data ----- no duplicates found
+print('Duplicate Narrative EventId:', df_narrative.shape[0] != df_narrative['EventId'].nunique())
 
 # ----- Read in aviation data download ----- delimiter == ' | ' ----- drop last column which is all blank
 df_aviation = pd.read_csv('data/AviationData.txt', sep=" \| {0,1}", header=0).drop(['Unnamed: 31'], axis=1)
 # ----- Rename 'Event Id' column to 'EventId'
 df_aviation = df_aviation.rename(index=str, columns={"Event Id": "EventId"})
-# ----- Check for duplicates of EventId in aviation data ----- there are duplicates
-df_aviation.shape[0] == df_aviation['EventId'].nunique()
+# ----- Check for duplicates of EventId in aviation data ----- duplicates found
+print('Duplicate Aviation EventId:', df_aviation.shape[0] != df_aviation['EventId'].nunique())
 # ----- Drop duplicate EventId in aviation data
 df_aviation_no_dup = df_aviation.drop_duplicates(subset=['EventId'], keep=False)
 
@@ -163,26 +165,27 @@ df_narrative_aviation = pd.merge(left=df_narrative, right=df_aviation_no_dup, on
 df_narrative_aviation_match = df_narrative_aviation.loc[df_narrative_aviation['_merge'] == 'both']
 
 # ----- Create additional event date columns
-df_narrative_aviation_match['Event Year Month'] = df_narrative_aviation_match['Event Date'].map(
+df_narrative_aviation_match.loc[:,'Event Year Month'] = df_narrative_aviation_match['Event Date'].map(
         lambda x: x[6:10] + '-' + x[0:2])
-df_narrative_aviation_match['Event Year'] = df_narrative_aviation_match['Event Date'].apply(
+df_narrative_aviation_match.loc[:,'Event Year'] = df_narrative_aviation_match['Event Date'].apply(
         lambda x: datetime.strptime(x, '%m/%d/%Y').date().year)
-df_narrative_aviation_match['Event Date DT Format'] = df_narrative_aviation_match['Event Date'].apply(
+df_narrative_aviation_match.loc[:,'Event Date DT Format'] = df_narrative_aviation_match['Event Date'].apply(
         lambda x: datetime.strptime(x, '%m/%d/%Y').date())
 
 
 # ----- Count empty cells in narrative and probable_cause columns
-(df_narrative_aviation_match['narrative'].values == "").sum()
-(df_narrative_aviation_match['probable_cause'].values == "").sum()
+print('narrative column has', (df_narrative_aviation_match['narrative'].values == "").sum(), 'blanks')
+print('probable_cause column has', (df_narrative_aviation_match['probable_cause'].values == "").sum(), 'blanks')
 
 # ----- Subset to only include rows where probable_cause and narrative is not blank
 df_narrative_aviation_final = df_narrative_aviation_match.loc[(df_narrative_aviation_match['probable_cause'] != "") &
                                                               (df_narrative_aviation_match['narrative'] != "")]
 
 
-# ----- Count unique values in probable_cause
-df_narrative_aviation_final.probable_cause.nunique()
-# duplicate values in probable_cause column
+# ----- Check for duplicates of probable_cause in merged data ----- duplicates found
+print('Duplicate probable_cause:', df_narrative_aviation.shape[0] != 
+      df_narrative_aviation_final.probable_cause.nunique())
+
 
 # ----- Get duplicate probable_cause
 pc = df_narrative_aviation_final.probable_cause
