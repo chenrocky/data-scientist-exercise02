@@ -1,5 +1,13 @@
 ## RTI CDS Analytics Exercise 02
 
+See write-up [here](https://medium.com/@rchen1990/clustering-and-tracking-aviation-accidents-over-time-3406ac63028e). The latest code and data are in this repository.
+
+Note, the data folder of this repository does not contain the file of the pre-trained fastText word vectors used in the nlp.py code. Download the pre-trained word vectors [here](https://fasttext.cc/docs/en/english-vectors.html)
+
+Original description of the excercise is below.
+
+----
+
 Welcome to Exercise 02. This exercise provides data from the [National Transportation Safety Board](http://www.ntsb.gov/Pages/default.aspx)'s [database of aviation accidents](http://www.ntsb.gov/_layouts/ntsb.aviation/index.aspx). We'll ask you to perform some routine high-level analytic tasks with the data. 
 
 ----

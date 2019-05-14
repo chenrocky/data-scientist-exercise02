@@ -2,3 +2,6 @@
 .idea/
 /data/wiki-news-300d-1M.vec
 .spyproject
+/data/plotly_cred.py
+/src/.ipynb_checkpoints
+__pycache__
