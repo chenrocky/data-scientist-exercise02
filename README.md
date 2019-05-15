@@ -2,7 +2,7 @@
 
 See write-up [here](https://medium.com/@rchen1990/clustering-and-tracking-aviation-accidents-over-time-3406ac63028e). The latest code and data are in this repository.
 
-Note, the data folder of this repository does not contain the file of the pre-trained fastText word vectors used in the nlp.py code. Download the pre-trained word vectors [here](https://fasttext.cc/docs/en/english-vectors.html)
+Note, the data folder of this repository does not contain the file of the pre-trained fastText word vectors used in the nlp.py code. Download the pre-trained word vectors [here](https://fasttext.cc/docs/en/english-vectors.html).
 
 Original description of the excercise is below.
 
