@@ -1,8 +1,6 @@
-json==2.0.9
 pandas==0.24.2
 numpy==1.14.2
-re==2.2.1
 gensim==3.2.0
-sklearn==0.21.0
+scikit-learn==0.21.0
 plotly==3.9.0
 cufflinks==0.15
